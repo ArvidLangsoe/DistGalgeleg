@@ -1,0 +1,10 @@
+/*
+Master layout
+*/
+#top h1 {
+    margin: 2rem 0;
+}
+
+#master_layout .list-group {
+    max-width: 300px;
+}
