@@ -9,7 +9,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 
-@WebService(endpointInterface = "hangman.server.IGalgeController")
+@WebService(endpointInterface = "gameserver.server.IGalgeController")
 public class GalgeController implements IGalgeController {
 
     private Hashtable<String, GalgeLogik> gameMap;
@@ -72,7 +72,9 @@ public class GalgeController implements IGalgeController {
         gameMap.get(playerName).gætBogstav(letter);
     }
 
-    public HangmanData getData(String playerName) {
+
+
+    public HangmanData getGameData(String playerName) {
         return null;
     }
 
@@ -80,7 +82,7 @@ public class GalgeController implements IGalgeController {
         return null;
     }
 
-    public HashMap<String, HangmanData> getAllGames(String adminName) {
+    public String getAllGames(String adminName) {
         return null;
     }
 

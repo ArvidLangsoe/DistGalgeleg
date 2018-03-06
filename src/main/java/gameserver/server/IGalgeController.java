@@ -43,15 +43,18 @@ public interface IGalgeController {
     public void guessLetter(String playerName, String letter);
 
     @WebMethod
-    public HangmanData getData(String playerName);
+    public HangmanData getGameData(String playerName);
 
     @WebMethod
     public GameHistory getData();
 
-    public HashMap<String, HangmanData> getAllGames(String adminName);
+    @WebMethod
+    public String getAllGames(String adminName);
 
+    @WebMethod
     public void endGame(String adminName, String playerName);
 
+    @WebMethod
     public void deleteGameData(String adminName, String playerName);
 
 
