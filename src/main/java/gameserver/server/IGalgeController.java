@@ -48,10 +48,13 @@ public interface IGalgeController {
     @WebMethod
     public GameHistory getData();
 
+    @WebMethod
     public HashMap<String, HangmanData> getAllGames(String adminName);
 
+    @WebMethod
     public void endGame(String adminName, String playerName);
 
+    @WebMethod
     public void deleteGameData(String adminName, String playerName);
 
 
