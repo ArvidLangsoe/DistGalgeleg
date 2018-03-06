@@ -1,28 +1,40 @@
 package webserver;
 
 import galgeleg.IGalgelogik;
+import gameserver.server.IGalgeController;
 
 import javax.annotation.PostConstruct;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 @Path("/rest")
 public class GalgeResource {
 
-    private static IGalgelogik logik;
+    private static IGalgeController controller;
 
     static {
+        URL url = null;
         try {
-            logik = (IGalgelogik) Naming.lookup("rmi://localhost:1099/galgeleg");
-        } catch (Exception e) {
+            url = new URL("http://localhost:9901/hangman?wsdl");
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        QName qname = new QName("http://server.hangman/", "GalgeControllerService");
+        Service service = Service.create(url, qname);
+        controller = service.getPort(IGalgeController.class);
     }
 
+    /*
+    * Create JSON with all available resources
+    * */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getResources() {
@@ -46,7 +58,7 @@ public class GalgeResource {
     @GET
     @Path("data")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getGameData() {
+    public String getAllGameData() {
         return "";
     }
 
@@ -95,6 +107,7 @@ public class GalgeResource {
     /*
     * OLD below
     * */
+    /*
 
     @GET
     @Path("word/full")
@@ -134,7 +147,7 @@ public class GalgeResource {
         logik.gætBogstav(letter);
         return Boolean.toString(logik.erSidsteBogstavKorrekt());
     }
-    */
+
     @POST
     @Path("word/guess/{letter}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -150,4 +163,5 @@ public class GalgeResource {
         logik.gætBogstav(letter);
         return logik.getSynligtOrd();
     }
+    */
 }
