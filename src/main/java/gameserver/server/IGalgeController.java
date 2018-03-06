@@ -49,7 +49,7 @@ public interface IGalgeController {
     public GameHistory getData();
 
     @WebMethod
-    public HashMap<String, HangmanData> getAllGames(String adminName);
+    public String getAllGames(String adminName);
 
     @WebMethod
     public void endGame(String adminName, String playerName);

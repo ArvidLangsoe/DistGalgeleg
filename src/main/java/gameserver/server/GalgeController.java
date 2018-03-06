@@ -82,7 +82,7 @@ public class GalgeController implements IGalgeController {
         return null;
     }
 
-    public HashMap<String, HangmanData> getAllGames(String adminName) {
+    public String getAllGames(String adminName) {
         return null;
     }
 
