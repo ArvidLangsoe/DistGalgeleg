@@ -1,7 +1,11 @@
 package gameserver.server;
 
+import gameserver.transport.GameHistory;
+import gameserver.transport.HangmanData;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,13 +46,13 @@ public interface IGalgeController {
     public HangmanData getData(String playerName);
 
     @WebMethod
-    public GameData getData();
+    public GameHistory getData();
 
-    public getAllGames(String adminName);
+    public HashMap<String, HangmanData> getAllGames(String adminName);
 
-    public endGame(String adminName, String playerName);
+    public void endGame(String adminName, String playerName);
 
-    public deleteGameData(String adminName, String playerName);
+    public void deleteGameData(String adminName, String playerName);
 
 
 
