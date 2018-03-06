@@ -4,7 +4,6 @@ import gameserver.transport.GameHistory;
 import gameserver.transport.HangmanData;
 
 import javax.jws.WebService;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -75,7 +74,14 @@ public class GalgeController implements IGalgeController {
 
 
     public HangmanData getGameData(String playerName) {
-        return null;
+        HangmanData data = new HangmanData();
+
+        data.gameHasEnded=isTheGameOver(playerName);
+        data.gameWon=isTheGameWon(playerName);
+        data.isLastLetterCorrect=isLastLetterCorrect(playerName);
+        data.numWrongLetters=getNumWrongLetters(playerName);
+        data.word=getVisibleWord(playerName);
+        return data;
     }
 
     public GameHistory getData() {
