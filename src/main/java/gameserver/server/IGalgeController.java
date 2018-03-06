@@ -43,7 +43,7 @@ public interface IGalgeController {
     public void guessLetter(String playerName, String letter);
 
     @WebMethod
-    public HangmanData getData(String playerName);
+    public HangmanData getGameData(String playerName);
 
     @WebMethod
     public GameHistory getData();
