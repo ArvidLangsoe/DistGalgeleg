@@ -46,7 +46,7 @@ public interface IGalgeController {
     public HangmanData getGameData(String playerName);
 
     @WebMethod
-    public GameHistory getData();
+    public GameHistory getHistoryData();
 
     @WebMethod
     public String getAllGames(String adminName);

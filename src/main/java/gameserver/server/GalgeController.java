@@ -84,7 +84,7 @@ public class GalgeController implements IGalgeController {
         return data;
     }
 
-    public GameHistory getData() {
+    public GameHistory getHistoryData() {
         return null;
     }
 
