@@ -1,13 +1,13 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="dist_forprojekt3:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/dist_forprojekt3_war_exploded</output-path>
+  <artifact type="exploded-war" name="galgeleg">
+    <output-path>$PROJECT_DIR$/out/artifacts/galgeleg</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="dist_galgeleg/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="dist_galgeleg" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="dist_galgeleg/web/Web" />
     </root>
   </artifact>
 </component>

@@ -15,7 +15,7 @@ import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-@Path("/rest")
+@Path("/")
 public class GalgeResource {
 
     private static IGalgeController controller;
@@ -27,7 +27,7 @@ public class GalgeResource {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        QName qname = new QName("http://server.hangman/", "GalgeControllerService");
+        QName qname = new QName("http://server.gameserver/", "GalgeControllerService");
         Service service = Service.create(url, qname);
         controller = service.getPort(IGalgeController.class);
     }
@@ -36,9 +36,10 @@ public class GalgeResource {
     * Create JSON with all available resources
     * */
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String getResources() {
-        return "Hello World";
+        controller.newGame("Jeppe");
+        return controller.getFullWord("Jeppe");
     }
 
     @GET
