@@ -6,7 +6,9 @@ import gameserver.transport.HangmanData;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @WebService
@@ -28,9 +30,6 @@ public interface IGalgeController {
     public String getVisibleWord(String playerName);
 
     @WebMethod
-    public String getFullWord(String playerName);
-
-    @WebMethod
     public int getNumWrongLetters(String playerName);
 
     @WebMethod
@@ -40,16 +39,16 @@ public interface IGalgeController {
     public boolean isLastLetterCorrect(String playerName);
 
     @WebMethod
-    public void guessLetter(String playerName, String letter);
+    public HangmanData guessLetter(String playerName, String letter);
 
     @WebMethod
     public HangmanData getGameData(String playerName);
 
     @WebMethod
-    public GameHistory getHistoryData();
+    public GameHistory getPlayHistoryData();
 
     @WebMethod
-    public String getAllGames(String adminName);
+    public Set<String> getAllGames(String adminName);
 
     @WebMethod
     public void endGame(String adminName, String playerName);
