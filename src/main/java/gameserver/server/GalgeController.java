@@ -2,8 +2,13 @@ package gameserver.server;
 
 import gameserver.transport.HangmanData;
 import gameserver.transport.PlayerHistory;
+import securityserver.ISecurityManager;
 
 import javax.jws.WebService;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -15,17 +20,32 @@ public class GalgeController implements IGalgeController {
     private Hashtable<String, GalgeLogik> gameMap;
 
     private GameHistory history;
+    ISecurityManager security;
 
     public GalgeController(){
+        try {
+            security=(ISecurityManager) Naming.lookup("rmi://localhost:44657/security");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public GalgeController(String rmiLookup) throws RemoteException, NotBoundException, MalformedURLException {
         gameMap=new Hashtable<String,GalgeLogik>();
         history=new GameHistory();
         new GalgeLogik();
+
+        security=(ISecurityManager) Naming.lookup(rmiLookup);
     }
 
 
-    public void newGame(String playerName){
-        //TODO Check playerName is logged in.
+    public HangmanData newGame(String playerName) throws Exception{
+        if(!security.isLoggedIn(playerName)){
+            throw new Exception("You are not logged in.");
+        }
         gameMap.put(playerName,new GalgeLogik());
+        return getGameData(playerName);
     }
 
 
@@ -72,8 +92,10 @@ public class GalgeController implements IGalgeController {
         return gameMap.get(playerName).getBrugteBogstaver();
     }
 
-    public HangmanData guessLetter(String playerName, String letter) {
-        //TODO Check playerName is logged in.
+    public HangmanData guessLetter(String playerName, String letter) throws Exception{
+        if(!security.isLoggedIn(playerName)){
+            throw new Exception("You are not logged in.");
+        }
         gameMap.get(playerName).gætBogstav(letter);
         return getGameData(playerName);
     }
@@ -100,19 +122,37 @@ public class GalgeController implements IGalgeController {
         return history.getPlayHistory(playerName);
     }
 
-    public Set<String> getAllGames(String adminName) {
-        //TODO Check adminName is logged in.
+    public boolean login(String playerName, String password) {
+        try {
+            return security.login(playerName,password);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Set<String> getAllGames(String adminName) throws Exception{
+        if(!security.isLoggedInAdmin(adminName)){
+            throw new Exception("You dont have permission");
+        }
         return gameMap.keySet();
     }
 
-    public void endGame(String adminName, String playerName) {
-//TODO Check adminName is logged in.
+    public void endGame(String adminName, String playerName) throws Exception{
+        if(!security.isLoggedInAdmin(adminName)){
+            throw new Exception("You dont have permission");
+        }
         if(gameMap.containsKey(playerName)){
             gameMap.remove(playerName);
         }
     }
 
-    public void deleteGameData(String adminName, String playerName) {
-        //TODO Check adminName is logged in.
+    public void deleteGameData(String adminName, String playerName) throws Exception{
+        if(!security.isLoggedInAdmin(adminName)){
+            throw new Exception("You dont have permission");
+        }
+
+        gameMap.remove(playerName);
     }
 }

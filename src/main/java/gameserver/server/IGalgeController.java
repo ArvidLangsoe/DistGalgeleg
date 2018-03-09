@@ -13,7 +13,7 @@ import java.util.Set;
 public interface IGalgeController {
 
     @WebMethod
-    public void newGame(String playerName);
+    public HangmanData newGame(String playerName) throws Exception;
 
     @WebMethod
     public boolean isTheGameOver(String playerName);
@@ -37,7 +37,7 @@ public interface IGalgeController {
     public boolean isLastLetterCorrect(String playerName);
 
     @WebMethod
-    public HangmanData guessLetter(String playerName, String letter);
+    public HangmanData guessLetter(String playerName, String letter) throws Exception;
 
     @WebMethod
     public HangmanData getGameData(String playerName);
@@ -48,13 +48,16 @@ public interface IGalgeController {
     public PlayerHistory getPlayerHistoryData(String playerName);
 
     @WebMethod
-    public Set<String> getAllGames(String adminName);
+    public boolean login(String playerName,String password);
 
     @WebMethod
-    public void endGame(String adminName, String playerName);
+    public Set<String> getAllGames(String adminName)throws Exception;
 
     @WebMethod
-    public void deleteGameData(String adminName, String playerName);
+    public void endGame(String adminName, String playerName)throws Exception;
+
+    @WebMethod
+    public void deleteGameData(String adminName, String playerName)throws Exception;
 
 
 

@@ -6,4 +6,6 @@ public interface ISecurityManager extends java.rmi.Remote{
 
     public boolean isLoggedIn(String name)throws java.rmi.RemoteException;
 
+    public boolean isLoggedInAdmin(String adminName) throws  java.rmi.RemoteException;
+
 }

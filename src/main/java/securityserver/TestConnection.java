@@ -8,6 +8,6 @@ import java.rmi.RemoteException;
 public class TestConnection {
     public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
         ISecurityManager sM = (ISecurityManager) Naming.lookup("rmi://localhost:44657/security");
-        System.out.println(sM.isLoggedIn("haha"));
+        System.out.println(sM.login("s144265","123456"));
     }
 }
