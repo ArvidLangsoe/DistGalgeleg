@@ -88,6 +88,7 @@ public class GalgeController implements IGalgeController {
         data.isLastLetterCorrect=isLastLetterCorrect(playerName);
         data.numWrongLetters=getNumWrongLetters(playerName);
         data.word=getVisibleWord(playerName);
+        data.usedLetters=getUsedLetters(playerName);
         return data;
     }
 
