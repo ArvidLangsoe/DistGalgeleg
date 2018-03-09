@@ -1,23 +1,25 @@
-package gameclient;
-
-
-import gameserver.server.IGalgeController;
+package gameserver.server;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GameClient {
-    public static void main(String[] args) throws Exception {
+public class AdminTest {
 
+    public static void main(String[] args) throws Exception {
         URL url = new URL("http://localhost:44656/hangman?wsdl");
         QName qname = new QName("http://server.gameserver/", "GalgeControllerService");
         Service service = Service.create(url, qname);
         IGalgeController gc = service.getPort(IGalgeController.class);
 
-        GameController game = new GameController(gc);
+        gc.login("admin","qwerty");
 
-        game.runGame();
+        gc.newGame("admin");
+        System.out.println(gc.getAllGames("admin"));
+        gc.endGame("admin","admin");
+        System.out.println(gc.getAllGames("admin"));
+
+
     }
 }

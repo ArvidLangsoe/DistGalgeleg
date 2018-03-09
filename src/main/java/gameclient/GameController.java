@@ -11,7 +11,7 @@ public class GameController {
 
     Scanner sc;
 
-    String player = "placeholder";
+    String player = null;
 
     public GameController(IGalgeController controller){
         this.con=controller;
@@ -20,7 +20,26 @@ public class GameController {
     }
 
 
-    public void runGame(){
+    public void runGame() throws Exception {
+        String name=null;
+        String password=null;
+
+        do {
+            if(name!=null){
+                System.out.println("Wrong login information please try again!");
+            }
+            System.out.println("Please enter username: ");
+            name = sc.nextLine();
+            System.out.println("Please enter password: ");
+            password = sc.nextLine();
+        }while(!con.login(name,password));
+
+        player=name;
+        password=null;
+
+        System.out.println("You are now loggedIn!");
+
+
         System.out.println("Welcome to hangman! Guess the word, by typing a letter and pressing enter.");
         con.newGame(player);
 
@@ -78,6 +97,7 @@ public class GameController {
                 PlayerHistory pH =con.getPlayerHistoryData(player);
 
                 System.out.println("You have played: "+pH.gamesPlayed + " game and won: "+ pH.gamesWon);
+                System.out.println("Here are all the scores: \n"+con.getPlayHistoryData());
                 break;
             }
         }
