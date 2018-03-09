@@ -1,8 +1,7 @@
-package gameserver.client;
+package gameclient;
 
 import gameserver.server.IGalgeController;
-import gameserver.server.PlayerHistory;
-import gameserver.transport.GameHistory;
+import gameserver.transport.PlayerHistory;
 
 import java.util.Scanner;
 

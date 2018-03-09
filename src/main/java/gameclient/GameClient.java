@@ -1,7 +1,6 @@
-package gameserver.client;
+package gameclient;
 
 
-import gameserver.server.GalgeController;
 import gameserver.server.IGalgeController;
 
 import javax.xml.namespace.QName;

@@ -1,10 +1,9 @@
 package gameserver.server;
 
-import gameserver.transport.GameHistory;
 import gameserver.transport.HangmanData;
+import gameserver.transport.PlayerHistory;
 
 import javax.jws.WebService;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +24,7 @@ public class GalgeController implements IGalgeController {
 
 
     public void newGame(String playerName){
+        //TODO Check playerName is logged in.
         gameMap.put(playerName,new GalgeLogik());
     }
 
@@ -73,6 +73,7 @@ public class GalgeController implements IGalgeController {
     }
 
     public HangmanData guessLetter(String playerName, String letter) {
+        //TODO Check playerName is logged in.
         gameMap.get(playerName).gætBogstav(letter);
         return getGameData(playerName);
     }
@@ -99,6 +100,7 @@ public class GalgeController implements IGalgeController {
     }
 
     public Set<String> getAllGames(String adminName) {
+        //TODO Check adminName is logged in.
         return gameMap.keySet();
     }
 
@@ -110,6 +112,6 @@ public class GalgeController implements IGalgeController {
     }
 
     public void deleteGameData(String adminName, String playerName) {
-
+        //TODO Check adminName is logged in.
     }
 }

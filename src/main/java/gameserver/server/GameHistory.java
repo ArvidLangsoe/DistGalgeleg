@@ -1,6 +1,6 @@
-package gameserver.transport;
+package gameserver.server;
 
-import gameserver.server.PlayerHistory;
+import gameserver.transport.PlayerHistory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

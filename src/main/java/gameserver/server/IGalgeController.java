@@ -1,12 +1,10 @@
 package gameserver.server;
 
-import gameserver.transport.GameHistory;
 import gameserver.transport.HangmanData;
+import gameserver.transport.PlayerHistory;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
