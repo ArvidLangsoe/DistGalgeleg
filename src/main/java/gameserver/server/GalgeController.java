@@ -27,6 +27,7 @@ public class GalgeController implements IGalgeController {
             security=(ISecurityManager) Naming.lookup("rmi://localhost:44657/security");
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(-1);
         }
 
     }

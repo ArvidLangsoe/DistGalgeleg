@@ -19,14 +19,18 @@ public class SecurityManager extends UnicastRemoteObject implements ISecurityMan
 
     Brugeradmin ba;
 
-    SecurityManager() throws RemoteException, MalformedURLException, NotBoundException {
+    SecurityManager() throws RemoteException {
         testUsersWithPasswords.put("admin","qwerty");
         testUsersWithPasswords.put("testuser","12345");
 
         admins.add("admin");
         admins.add("s144265");
         admins.add("093905");
+        try{
         ba = (Brugeradmin) Naming.lookup("rmi://javabog.dk/brugeradmin");
+        } catch (Exception e){
+            System.err.println("Could not connect to login server, only test users are allowed");
+        }
     }
 
     public boolean login(String name, String password){
