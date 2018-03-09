@@ -1,4 +1,4 @@
-package gameserver;
+package gameserver.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -10,15 +10,55 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
-public class UrlTester {
+public class WordProvider extends Thread {
 
-    static HashSet<String> words = new HashSet<String>();
+    List<String> words;
 
-    public static void main(String[] args) throws IOException {
-        String popURL = "https://www.dr.dk/mu-online/api/1.3/list/view/mostviewed?channel=dr1&channeltype=TV&limit=20&offset=0";
+
+    public WordProvider(boolean doDownloadWords){
+        words= Collections.synchronizedList(new ArrayList<String>(6000));
+        words.add("bil");
+        words.add("computer");
+        words.add("programmering");
+        words.add("motorvej");
+        words.add("busrute");
+        words.add("gangsti");
+        words.add("skovsnegl");
+        words.add("solsort");
+        words.add("seksten");
+        words.add("sytten");
+        if(doDownloadWords) {
+            this.start();
+        }
+    }
+
+
+    String getRandomWord(){
+        return words.get(new Random().nextInt(words.size()));
+    }
+
+    @Override
+    public void run(){
+        System.out.println("Starting word download");
+        try {
+            HashSet<String> downWords = getWordsFromDR();
+            for(String word: downWords){
+                words.add(word);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Words Downloaded from DR");
+    }
+
+    /*
+    * Download the subtitle from the second to 7 most popular shows. Ruling out number 1 because its X-factor and contains alot of English subtitle from songs.
+    * */
+    public HashSet<String> getWordsFromDR() throws IOException {
+        HashSet<String> words = new HashSet<String>();
+        String popURL = "https://www.dr.dk/mu-online/api/1.3/list/view/mostviewed?channel=dr1&channeltype=TV&limit=6&offset=1";
 
         JsonElement root = getJson(popURL);
         JsonObject rootobj = root.getAsJsonObject(); //Array
@@ -85,12 +125,8 @@ public class UrlTester {
                 }
 
             }
-
-
-
         }
-        System.out.println(words);
-        System.out.println(words.size());
+        return words;
     }
 
     static JsonElement getJson(String link) throws IOException {
@@ -102,4 +138,5 @@ public class UrlTester {
         JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
         return root;
     }
+
 }

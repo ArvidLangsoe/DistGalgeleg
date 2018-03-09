@@ -1,6 +1,6 @@
-package gameserver.client;
+package hangman.client;
 
-import gameserver.server.IGalgeController;
+import hangman.server.IGalgeController;
 
 import java.util.Scanner;
 

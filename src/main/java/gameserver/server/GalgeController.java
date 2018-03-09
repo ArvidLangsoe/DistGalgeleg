@@ -1,11 +1,12 @@
 package gameserver.server;
 
-import gameserver.transport.GameHistory;
 import gameserver.transport.HangmanData;
+import gameserver.transport.PlayerHistory;
 
 import javax.jws.WebService;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 
 @WebService(endpointInterface = "gameserver.server.IGalgeController")
@@ -13,21 +14,27 @@ public class GalgeController implements IGalgeController {
 
     private Hashtable<String, GalgeLogik> gameMap;
 
+    private GameHistory history;
+
     public GalgeController(){
         gameMap=new Hashtable<String,GalgeLogik>();
+        history=new GameHistory();
+        new GalgeLogik();
     }
 
 
     public void newGame(String playerName){
+        //TODO Check playerName is logged in.
         gameMap.put(playerName,new GalgeLogik());
     }
 
 
     public boolean isTheGameOver(String playerName){
-
-        boolean status = gameMap.get(playerName).erSpilletSlut();
-        if(status){
-            System.out.println(playerName + " has just finished a game.");
+        GalgeLogik game= gameMap.get(playerName);
+        boolean status = game.erSpilletSlut();
+        if(status&&!game.isGameAddedToHistory()){
+            history.addGame(playerName,game.erSpilletVundet());
+            game.setGameAddedToHistory(true);
         }
         return status;
     }
@@ -49,14 +56,12 @@ public class GalgeController implements IGalgeController {
 
 
     public String getVisibleWord(String playerName){
+
+        if(isTheGameOver(playerName)){
+            return gameMap.get(playerName).getOrdet();
+        }
         return gameMap.get(playerName).getSynligtOrd();
     }
-
-
-    public String getFullWord(String playerName){
-        return gameMap.get(playerName).getOrdet();
-    }
-
 
     public int getNumWrongLetters(String playerName) {
         return gameMap.get(playerName).getAntalForkerteBogstaver();
@@ -67,8 +72,10 @@ public class GalgeController implements IGalgeController {
         return gameMap.get(playerName).getBrugteBogstaver();
     }
 
-    public void guessLetter(String playerName, String letter) {
+    public HangmanData guessLetter(String playerName, String letter) {
+        //TODO Check playerName is logged in.
         gameMap.get(playerName).gætBogstav(letter);
+        return getGameData(playerName);
     }
 
 
@@ -81,22 +88,31 @@ public class GalgeController implements IGalgeController {
         data.isLastLetterCorrect=isLastLetterCorrect(playerName);
         data.numWrongLetters=getNumWrongLetters(playerName);
         data.word=getVisibleWord(playerName);
+        data.usedLetters=getUsedLetters(playerName);
         return data;
     }
 
-    public GameHistory getHistoryData() {
-        return null;
+    public List<PlayerHistory> getPlayHistoryData() {
+        return history.getAllPlayHistory();
     }
 
-    public String getAllGames(String adminName) {
-        return null;
+    public PlayerHistory getPlayerHistoryData(String playerName) {
+        return history.getPlayHistory(playerName);
+    }
+
+    public Set<String> getAllGames(String adminName) {
+        //TODO Check adminName is logged in.
+        return gameMap.keySet();
     }
 
     public void endGame(String adminName, String playerName) {
-
+//TODO Check adminName is logged in.
+        if(gameMap.containsKey(playerName)){
+            gameMap.remove(playerName);
+        }
     }
 
     public void deleteGameData(String adminName, String playerName) {
-
+        //TODO Check adminName is logged in.
     }
 }

@@ -1,4 +1,4 @@
-package gameserver.server;
+package hangman.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class GalgeLogik {
     /** AHT afprøvning er muligeOrd synlig på pakkeniveau */
-    static WordProvider muligeOrd=new WordProvider(true);
+    ArrayList<String> muligeOrd = new ArrayList<String>();
     private String ordet;
     private ArrayList<String> brugteBogstaver = new ArrayList<String>();
     private String synligtOrd;
@@ -19,7 +19,6 @@ public class GalgeLogik {
     private boolean sidsteBogstavVarKorrekt;
     private boolean spilletErVundet;
     private boolean spilletErTabt;
-    private boolean gameAddedToHistory = false;
 
 
     public ArrayList<String> getBrugteBogstaver() {
@@ -55,7 +54,17 @@ public class GalgeLogik {
     }
 
 
-    public GalgeLogik(){
+    public GalgeLogik() {
+        muligeOrd.add("bil");
+        muligeOrd.add("computer");
+        muligeOrd.add("programmering");
+        muligeOrd.add("motorvej");
+        muligeOrd.add("busrute");
+        muligeOrd.add("gangsti");
+        muligeOrd.add("skovsnegl");
+        muligeOrd.add("solsort");
+        muligeOrd.add("seksten");
+        muligeOrd.add("sytten");
         nulstil();
     }
 
@@ -64,7 +73,7 @@ public class GalgeLogik {
         antalForkerteBogstaver = 0;
         spilletErVundet = false;
         spilletErTabt = false;
-        ordet = muligeOrd.getRandomWord();
+        ordet = muligeOrd.get(new Random().nextInt(muligeOrd.size()));
         opdaterSynligtOrd();
     }
 
@@ -130,11 +139,29 @@ public class GalgeLogik {
         return sb.toString();
     }
 
-    public boolean isGameAddedToHistory() {
-        return gameAddedToHistory;
-    }
 
-    public void setGameAddedToHistory(boolean gameAddedToHistory) {
-        this.gameAddedToHistory = gameAddedToHistory;
+    public void hentOrdFraDr() throws Exception {
+        String data = hentUrl("https://dr.dk");
+        //System.out.println("data = " + data);
+
+        data = data.substring(data.indexOf("<body")). // fjern headere
+                replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
+                replaceAll("&#198;", "æ"). // erstat HTML-tegn
+                replaceAll("&#230;", "æ"). // erstat HTML-tegn
+                replaceAll("&#216;", "ø"). // erstat HTML-tegn
+                replaceAll("&#248;", "ø"). // erstat HTML-tegn
+                replaceAll("&oslash;", "ø"). // erstat HTML-tegn
+                replaceAll("&#229;", "å"). // erstat HTML-tegn
+                replaceAll("[^a-zæøå]", " "). // fjern tegn der ikke er bogstaver
+                replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
+                replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
+
+        System.out.println("data = " + data);
+        System.out.println("data = " + Arrays.asList(data.split("\\s+")));
+        muligeOrd.clear();
+        muligeOrd.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
+
+        System.out.println("muligeOrd = " + muligeOrd);
+        nulstil();
     }
 }

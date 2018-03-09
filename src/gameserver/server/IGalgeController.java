@@ -1,12 +1,8 @@
-package gameserver.server;
-
-import gameserver.transport.HangmanData;
-import gameserver.transport.PlayerHistory;
+package hangman.server;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.util.List;
-import java.util.Set;
 
 
 @WebService
@@ -28,6 +24,9 @@ public interface IGalgeController {
     public String getVisibleWord(String playerName);
 
     @WebMethod
+    public String getFullWord(String playerName);
+
+    @WebMethod
     public int getNumWrongLetters(String playerName);
 
     @WebMethod
@@ -37,24 +36,19 @@ public interface IGalgeController {
     public boolean isLastLetterCorrect(String playerName);
 
     @WebMethod
-    public HangmanData guessLetter(String playerName, String letter);
+    public void guessLetter(String playerName, String letter);
 
     @WebMethod
-    public HangmanData getGameData(String playerName);
+    public HangmanData getData(String playerName);
 
     @WebMethod
-    public List<PlayerHistory> getPlayHistoryData();
-    @WebMethod
-    public PlayerHistory getPlayerHistoryData(String playerName);
+    public GameData getData();
 
-    @WebMethod
-    public Set<String> getAllGames(String adminName);
+    public getAllGames(String adminName);
 
-    @WebMethod
-    public void endGame(String adminName, String playerName);
+    public endGame(String adminName,String playerName);
 
-    @WebMethod
-    public void deleteGameData(String adminName, String playerName);
+    public deleteGameData(String adminName, String playerName);
 
 
 
