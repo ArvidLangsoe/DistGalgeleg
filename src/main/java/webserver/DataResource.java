@@ -1,13 +1,7 @@
 package webserver;
 
-import gameserver.server.IGalgeController;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 @Path("/data")
 public class DataResource {

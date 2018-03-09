@@ -41,12 +41,10 @@ public class GameResource {
         Response.ResponseBuilder responseBuilder;
         try {
             if(newGame) {
-                AppConfig.controller.newGame(playerId);
+                data = AppConfig.controller.newGame(playerId);
             }
-            else {
-                AppConfig.controller.guessLetter(playerId, letter);
-            }
-            data = AppConfig.controller.getGameData(playerId);
+            
+            data = AppConfig.controller.guessLetter(playerId, letter);
             responseBuilder = Response.status(Response.Status.OK).entity(data);
 
         } catch(Exception e) {

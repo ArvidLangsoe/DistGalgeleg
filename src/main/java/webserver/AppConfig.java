@@ -20,7 +20,7 @@ public class AppConfig extends Application {
     static {
         URL url = null;
         try {
-            url = new URL("http://localhost:9901/hangman?wsdl");
+            url = new URL("http://localhost:44656/hangman?wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
