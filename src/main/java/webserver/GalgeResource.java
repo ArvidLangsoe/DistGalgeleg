@@ -2,6 +2,7 @@ package webserver;
 
 import galgeleg.IGalgelogik;
 import gameserver.server.IGalgeController;
+import gameserver.transport.HangmanData;
 
 import javax.annotation.PostConstruct;
 import javax.print.attribute.standard.Media;
@@ -38,24 +39,56 @@ public class GalgeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getResources() {
-        controller.newGame("Jeppe");
-        return controller.getFullWord("Jeppe");
+        return "Galgeleg REST API: "+ controller.getFullWord("s093905");
     }
 
+    /*
+    * Get player's game data
+    * */
     @GET
-    @Path("{id}/hangman")
+    @Path("game/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getGameInfo(@PathParam("id") String playerId) {
-        return "";
+    public Response getGameInfo(@PathParam("id") String playerId) {
+        HangmanData data;
+        Response.ResponseBuilder responseBuilder;
+        try {
+            data = controller.getGameData(playerId);
+            responseBuilder = Response.status(200).entity(data);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            responseBuilder = Response.status(404, "User not found");
+        }
+        return responseBuilder.build();
     }
 
+    /*
+    * Create a new game or guess a letter
+    * */
     @POST
-    @Path("{id}/hangman/")
+    @Path("game/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String guessLetter(@PathParam("id") String playerId, @QueryParam("letter") String letter) {
-        return "";
+    public HangmanData postGame(@PathParam("id") String playerId, @QueryParam("letter") String letter, @QueryParam("new") boolean newGame) {
+        HangmanData data = null;
+        try {
+            if(newGame) {
+                controller.newGame(playerId);
+            }
+            else {
+                controller.guessLetter(playerId, letter);
+            }
+            data = controller.getGameData(playerId);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 
+    /*
+    * TODO: Create new REST resource files
+    * */
     @GET
     @Path("data")
     @Produces(MediaType.APPLICATION_JSON)
