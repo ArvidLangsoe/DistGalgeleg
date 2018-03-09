@@ -39,7 +39,7 @@ public class GalgeResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getResources() {
-        return "Galgeleg REST API: "+ controller.getFullWord("s093905");
+        return "Galgeleg REST API: "+ controller.getVisibleWord("s093905");
     }
 
     /*

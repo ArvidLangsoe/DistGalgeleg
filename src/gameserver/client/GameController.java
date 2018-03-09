@@ -1,6 +1,6 @@
-package gameserver.client;
+package hangman.client;
 
-import gameserver.server.IGalgeController;
+import hangman.server.IGalgeController;
 
 import java.util.Scanner;
 
@@ -72,9 +72,11 @@ public class GameController {
                 else if(con.isTheGameLost(player)){
                     System.out.println("You lost the game :(");
                 }
-                System.out.println("The word was: "+ con.getVisibleWord(player));
+                System.out.println("The word was: "+ con.getFullWord(player));
                 break;
             }
+
+
         }
     }
 
