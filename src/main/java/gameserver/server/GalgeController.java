@@ -90,8 +90,12 @@ public class GalgeController implements IGalgeController {
         return data;
     }
 
-    public GameHistory getPlayHistoryData() {
-        return history;
+    public List<PlayerHistory> getPlayHistoryData() {
+        return history.getAllPlayHistory();
+    }
+
+    public PlayerHistory getPlayerHistoryData(String playerName) {
+        return history.getPlayHistory(playerName);
     }
 
     public Set<String> getAllGames(String adminName) {

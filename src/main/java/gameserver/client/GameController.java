@@ -1,6 +1,8 @@
 package gameserver.client;
 
 import gameserver.server.IGalgeController;
+import gameserver.server.PlayerHistory;
+import gameserver.transport.GameHistory;
 
 import java.util.Scanner;
 
@@ -73,6 +75,10 @@ public class GameController {
                     System.out.println("You lost the game :(");
                 }
                 System.out.println("The word was: "+ con.getVisibleWord(player));
+
+                PlayerHistory pH =con.getPlayerHistoryData(player);
+
+                System.out.println("You have played: "+pH.gamesPlayed + " game and won: "+ pH.gamesWon);
                 break;
             }
         }

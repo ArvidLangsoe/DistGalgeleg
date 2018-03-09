@@ -1,44 +1,40 @@
 package gameserver.transport;
 
+import gameserver.server.PlayerHistory;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameHistory implements Serializable {
-    private HashMap<String,PlayerHistory> playerHistory= new HashMap<String,PlayerHistory>();
+
+    private List<PlayerHistory> gameHistory = new ArrayList<PlayerHistory>();
 
     public void addGame(String playerName,boolean gameWon){
-        if(!playerHistory.containsKey(playerName)){
-            playerHistory.put(playerName,new PlayerHistory());
+        PlayerHistory pHis=null;
+        for(PlayerHistory pH: gameHistory){
+            if(playerName.equals(pH.playerName))
+                pHis=pH;
         }
-        PlayerHistory pHis = playerHistory.get(playerName);
+        if(pHis==null){
+            pHis=new PlayerHistory(playerName);
+            gameHistory.add(pHis);
+        }
+
         pHis.gamesPlayed++;
         if(gameWon){
             pHis.gamesWon++;
         }
     }
     public PlayerHistory getPlayHistory(String playerName){
-        return playerHistory.get(playerName).clone();
-    }
-    public Set<String> getPlayerNamesInHistory(){
-        return playerHistory.keySet();
-    }
-
-
-    public class PlayerHistory implements Cloneable{
-        public String playerName;
-        public int gamesPlayed;
-        public int gamesWon;
-
-        @Override
-        public PlayerHistory clone(){
-           PlayerHistory pHis= new PlayerHistory();
-
-           pHis.playerName=this.playerName;
-           pHis.gamesPlayed=this.gamesPlayed;
-           pHis.gamesWon=this.gamesWon;
-           return pHis;
+        for(PlayerHistory pH: gameHistory){
+            if(playerName.equals(pH.playerName))
+                return pH;
         }
+        return null;
+    }
+    public List<PlayerHistory> getAllPlayHistory(){
+        return gameHistory;
     }
 }
 
