@@ -6,7 +6,7 @@ const TEMPLATES_URI = "dist/mustache/";
 const COOKIE_NAME = "logged_in";
 
 $(document).ready(function() {
-
+    console.log(getCookie(COOKIE_NAME));
     if(getCookie(COOKIE_NAME) == null)
         loadPage("login.mst", "#main", false);
     else
@@ -36,8 +36,9 @@ $(document).ready(function() {
                 console.log("Logo");
                 break;
             case "link-logout":
-                loadPage("login.mst", "#main", true, AUTH_RESOURCE_URI+"logout/"+getCookie(COOKIE_NAME)[0], "POST");
-                setCookie(COOKIE_NAME, "", -1);
+                loadPage("login.mst", "#main", true, AUTH_RESOURCE_URI+"/logout/"+getCookie(COOKIE_NAME)[0], "POST");
+                //setCookie(COOKIE_NAME, "", -1);
+                break;
             default:
                 console.log("Andre")
         }
@@ -93,7 +94,8 @@ function loadPage(template, view, withRest, uri, type) {
         });
     } else {
         var cookieObj = getCookie(COOKIE_NAME);
-        render(template, view, { playerId: cookieObj[0], admin: cookieObj[1] });
+        if(cookieObj != null)
+            render(template, view, { playerId: cookieObj[0], admin: cookieObj[1] });
     }
 
 }

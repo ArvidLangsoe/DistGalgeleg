@@ -13,7 +13,12 @@ public class AuthResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@QueryParam("playerId") String playerId, @QueryParam("password") String password){
         Response.ResponseBuilder responseBuilder;
-        boolean loggedIn = AppConfig.controller.login(playerId, password);
+        boolean loggedIn = false;
+        try {
+            loggedIn = AppConfig.security.login(playerId, password);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         if(loggedIn) {
             boolean admin = false;
             try {
@@ -44,7 +49,11 @@ public class AuthResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response logout(@PathParam("id") String playerId) {
         Response.ResponseBuilder responseBuilder = null;
-        
+        try {
+            AppConfig.security.logout(playerId);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         return responseBuilder.build();
     }
 
