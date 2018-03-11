@@ -9,6 +9,12 @@ import javax.ws.rs.core.Response;
 @Path("/game")
 public class GameResource {
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public HangmanData getWordTest() {
+        return AppConfig.controller.getGameData("testuser");
+    }
+
     /*
     * Get player's game data
     * */
@@ -20,7 +26,6 @@ public class GameResource {
         Response.ResponseBuilder responseBuilder;
         try {
             data = AppConfig.controller.getGameData(playerId);
-            System.out.println(data);
             responseBuilder = Response.status(200).entity(data);
         }
         catch(Exception e) {
@@ -43,8 +48,10 @@ public class GameResource {
             if(newGame) {
                 data = AppConfig.controller.newGame(playerId);
             }
-            
-            data = AppConfig.controller.guessLetter(playerId, letter);
+            else {
+                data = AppConfig.controller.guessLetter(playerId, letter);
+            }
+
             responseBuilder = Response.status(Response.Status.OK).entity(data);
 
         } catch(Exception e) {

@@ -129,7 +129,6 @@ public class GalgeController implements IGalgeController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 

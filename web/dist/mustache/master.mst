@@ -12,7 +12,7 @@
                         <a class="nav-link" id="link-game" href="#">Spil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="link-data" href="#">Highscore</a>
+                        <a class="nav-link" id="link-history" href="#">Historik</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="link-rules" href="#">Regler</a>
@@ -22,11 +22,15 @@
                 <ul class="navbar-nav">
                     <li class="dropdown my-2 my-lg-0">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{name}}
-                            <span class="badge badge-primary">{{role}}</span>
+                            {{playerId}}
+                            {{#admin}}
+                            <span class="badge badge-primary">Admin</span>
+                            {{/admin}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Admin Panel</a>
+                            {{#admin}}
+                            <a class="dropdown-item" id="link-admin" href="#">Admin Panel</a>
+                            {{/admin}}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Logout</a>
                         </div>

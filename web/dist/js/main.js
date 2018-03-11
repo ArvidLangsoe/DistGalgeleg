@@ -1,34 +1,62 @@
 const RESOURCES_URI = "http://localhost:8080/galgeleg/rest";
-const GAME_RESOURCE = "/game";
-const DATA_RESOURCE = "/data";
+const GAME_RESOURCE_URI = "/game";
+const HISTORY_RESOURCE_URI = "/history";
+const AUTH_RESOURCE_URI = "/auth";
 const TEMPLATES_URI = "dist/mustache/";
-var user = "x";
-var gameActive = false;
+const COOKIE_NAME = "logged_in";
 
 $(document).ready(function() {
-    loadMaster();
 
-    $(document).on("click", "#nav-main a", function(event) {
+    if(getCookie(COOKIE_NAME) == null)
+        loadPage("login.mst", "#main", false);
+    else
+        loadPage("master.mst", "#main", false);
+
+
+    $(document).on("click", "#nav-main ul a", function(event) {
         event.preventDefault();
-        //console.log($(this).parent().siblings().children());
+
         $(this).addClass("active").parent().siblings().children().removeClass("active");
 
         var id = $(this).attr(("id"));
         switch(id) {
             case "link-game":
-                loadGame();
+                loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0], "GET");
                 break;
-            case "link-data":
-                console.log("Data");
+            case "link-history":
+                loadPage("history.mst", "#content", true, HISTORY_RESOURCE_URI, "GET");
                 break;
             case "link-rules":
-                console.log("Regler");
+                loadPage("rules.mst", "#content", false);
                 break;
+            case "link-admin":
+                console.log("Admin");
+                break;
+            case "link-logo":
+                console.log("Logo");
+                break;
+            case "link-logout":
+                loadPage("login.mst", "#main", true, AUTH_RESOURCE_URI+"logout/"+getCookie(COOKIE_NAME)[0], "POST");
+                setCookie(COOKIE_NAME, "", -1);
             default:
                 console.log("Andre")
         }
     });
 
+    $(document).on("submit", "#game_layout form", function(event) {
+        event.preventDefault();
+        var formData = $(this).serializeArray();
+        var letter = formData[0].value;
+        loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?letter="+letter, "POST");
+    });
+
+    $(document).on("submit", "#login_layout form", function(event) {
+        event.preventDefault();
+        var formData = $(this).serializeArray();
+        var playerId = formData[0].value;
+        var password = formData[1].value;
+        loadPage("master.mst", "#main", true, AUTH_RESOURCE_URI+"/login?playerId="+playerId+"&password="+password, "POST");
+    });
 
 });
 
@@ -37,40 +65,75 @@ function render(mustacheTemplate, htmlElement, restData) {
         var rendered = Mustache.render(template, restData);
         $(htmlElement).html(rendered);
     }).fail(function(msg) {
-        console.log("ERROR: " + msg);
+        console.log("ERROR render: " + msg);
     });
 }
 
-function loadMaster() {
-    render("master.mst", "#main", { name: "Jeppe", role: "Admin" });
-    /*
-    ajaxRest(RESOURCE_URI+"word/visible", "GET").done(function(data) {
-        render("game.mst", "#content", { word: data });
-    });
-    */
-}
-
-function loadGame() {
-    if(!gameActive) {
-        ajaxRest(RESOURCES_URI+GAME_RESOURCE+"/"+user+"?new=true", "POST").done(function (data) {
-            console.log(data);
-            //render("game.mst", "#content", {"word": "***", "numWrongLetters": 5});
-            render("game.mst", "#content", JSON.parse(data));
+function loadPage(template, view, withRest, uri, type) {
+    var json;
+    var $alert = $(".alert-danger");
+    if(withRest) {
+        rest(RESOURCES_URI+uri, type).done(function (data) {
+            $alert.attr("hidden");
+            json = JSON.parse(data);
+            console.log(json);
+            if(json.loggedIn) {
+                setCookie(COOKIE_NAME, json.playerId+"+"+json.admin, 7);
+            }
+            if(json.gameHasEnded) {
+                render("game_end.mst", view, json);
+            }
+            else {
+                render(template, view, json);
+            }
         }).fail(function (data) {
-            console.log(data);
+            //json = JSON.stringify(data);
+            $alert.removeAttr("hidden").html(data.responseText);
+            //console.log("ERROR REST:\n"+ json);
         });
+    } else {
+        var cookieObj = getCookie(COOKIE_NAME);
+        render(template, view, { playerId: cookieObj[0], admin: cookieObj[1] });
     }
 
-    gameActive = true;
 }
 
-function ajaxRest(url, type, data) {
+function rest(url, type) {
     return $.ajax({
         url : url,
         type : type,
-        dataType: "text",
-        data: data
+        dataType: "text"
     });
+}
+
+/*
+* From w3schools.com: https://www.w3schools.com/js/js_cookies.asp
+* */
+function setCookie(cname, cvalue, exdays) {
+    var date = new Date();
+    date.setTime(date.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ date.toUTCString();
+    document.cookie = cname+"="+cvalue+";"+expires;
+}
+
+/*
+* From w3schools.com: https://www.w3schools.com/js/js_cookies.asp
+* */
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            var obj = c.substring(name.length, c.length).split("+");
+            return obj;
+        }
+    }
+    return null;
 }
 
 /*
@@ -78,7 +141,7 @@ $(document).on("submit", "#guess_letter_form", function(event) {
         event.preventDefault();
         var formData = $(this).serializeArray();
 
-        ajaxRest(RESOURCE_URI+"word/guess", "POST", formData[0].value).done(function (data) {
+        rest(RESOURCE_URI+"word/guess", "POST", formData[0].value).done(function (data) {
             $("#word").text(data);
         }).fail(function(data) {
             console.log("ERROR in guess letter form")
@@ -90,13 +153,13 @@ $(document).on("submit", "#guess_letter_form", function(event) {
 
 function loadMaster() {
     render("master.mst", "#main", { name: "Jeppe", role: "Admin" });
-    ajaxRest(RESOURCE_URI+"word/visible", "GET").done(function(data) {
+    rest(RESOURCE_URI+"word/visible", "GET").done(function(data) {
         render("game.mst", "#content", { word: data });
     });
 }
 
 function gamePage() {
-    ajaxRest(RESOURCE_URI+"word/visible", "GET").done(function (data) {
+    rest(RESOURCE_URI+"word/visible", "GET").done(function (data) {
         $.get(TEMPLATES_URI+"game.mst", function(template) {
             var rendered = Mustache.render(template, {word: data});
             $("#main").html(rendered);

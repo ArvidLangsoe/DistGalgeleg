@@ -1,0 +1,19 @@
+<div id="login_layout">
+    <a class="navbar-brand h1" id="link-logo" href="#">GALGELEG</a>
+    <form>
+        <h4>Log in</h4>
+        <div class="form-group">
+            <label>Bruger id</label>
+            <input type="text" name="id" class="form-control" value="admin">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" value="qwerty">
+        </div>
+        <div class="form-group">
+            <div hidden class="alert alert-danger" role="alert"></div>
+            <button type="submit" class="btn btn-dark">Log ind</button>
+        </div>
+
+    </form>
+</div>
