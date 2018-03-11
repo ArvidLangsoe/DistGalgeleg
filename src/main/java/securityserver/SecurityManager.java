@@ -56,6 +56,10 @@ public class SecurityManager extends UnicastRemoteObject implements ISecurityMan
 
     }
 
+    public void logout(String name) {
+        loggedInUntill.remove(name);
+    }
+
     public boolean isLoggedIn(String name) {
         if(loggedInUntill.containsKey(name)){
             if(loggedInUntill.get(name).after(Calendar.getInstance())){
