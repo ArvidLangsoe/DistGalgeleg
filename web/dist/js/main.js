@@ -12,7 +12,7 @@ $(document).ready(function() {
         loadPage("master.mst", "#main", false);
 
 
-    $(document).on("click", "#nav-main a, #game_end_layout button", function(event) {
+    $(document).on("click", "#nav-main a, #game_layout button[type=\"button\"]", function(event) {
         event.preventDefault();
 
         $(this).addClass("active").parent().siblings().children().removeClass("active");
@@ -39,7 +39,9 @@ $(document).ready(function() {
                 setCookie(COOKIE_NAME, "", -1);
                 break;
             case "link-play":
+                console.log("Play again");
                 loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
+                break;
             default:
                 console.log("Andre")
         }
@@ -75,24 +77,27 @@ function loadPage(template, view, withRest, uri, type) {
     var json;
     var $alert = $(".alert-danger");
     if(withRest) {
-        rest(RESOURCES_URI+uri, type).done(function (data) {
+        rest(RESOURCES_URI+uri, type).done(function (data, textStatus, jqXHR) {
             $alert.attr("hidden");
-
+            if(jqXHR.status == 204) {
+                loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
+            }
             try {
                 json = JSON.parse(data);
             } catch (e) {
                 json = data;
             }
             console.log(json);
-
-            if(json.loggedIn) {
-                setCookie(COOKIE_NAME, json.playerId+"+"+json.admin, 7);
-            }
-            if(json.gameHasEnded) {
-                render("game_end.mst", view, json);
-            }
-            else {
-                render(template, view, json);
+            if(json != null) {
+                if(json.loggedIn) {
+                    setCookie(COOKIE_NAME, json.playerId+"+"+json.admin, 7);
+                }
+                if(json.gameHasEnded) {
+                    render("game_end.mst", view, json);
+                }
+                else {
+                    render(template, view, json);
+                }
             }
         }).fail(function (data) {
             //json = JSON.stringify(data);

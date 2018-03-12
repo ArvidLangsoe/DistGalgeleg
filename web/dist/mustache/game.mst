@@ -17,4 +17,5 @@
             <button type="submit" class="btn btn-primary">Gæt</button>
         </div>
     </form>
+    <button type="button" class="btn btn-dark" id="link-play">Start forfra</button>
 </div>

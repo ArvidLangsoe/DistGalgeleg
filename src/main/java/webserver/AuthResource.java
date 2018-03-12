@@ -27,11 +27,7 @@ public class AuthResource {
                 e.printStackTrace();
             }
             responseBuilder = Response.status(200).entity("{ \"loggedIn\": "+loggedIn+", \"playerId\": \""+playerId+"\", \"admin\": "+admin+" }");
-            try {
-                AppConfig.controller.newGame(playerId);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         } else {
             responseBuilder = Response.status(401).entity("Authentication failed");
         }

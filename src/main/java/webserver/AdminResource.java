@@ -25,7 +25,7 @@ public class AdminResource {
             if(history) {
                 try {
                     AppConfig.controller.deleteGameData(adminId, playerId);
-                    responseBuilder = Response.status(200).entity("Successfully deleted "+playerId+"'s game data.");
+                    responseBuilder = Response.status(200).entity("Successfully deleted "+playerId+"'s history game data.");
                 } catch (Exception e) {
                     e.printStackTrace();
                     responseBuilder = Response.status(401).entity(e);
@@ -35,7 +35,7 @@ public class AdminResource {
             else if(game) {
                 try {
                     AppConfig.controller.endGame(adminId, playerId);
-                    responseBuilder = Response.status(200).entity("Successfully ended "+playerId+"'s active game.");
+                    responseBuilder = Response.status(200).entity("Successfully ended "+playerId+"'s currently active game.");
                 } catch (Exception e) {
                     e.printStackTrace();
                     responseBuilder = Response.status(401).entity(e);

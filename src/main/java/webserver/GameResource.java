@@ -30,7 +30,7 @@ public class GameResource {
         }
         catch(Exception e) {
             e.printStackTrace();
-            responseBuilder = Response.status(404).entity("User not found");
+            responseBuilder = Response.status(204).entity("No game data for that user.");
         }
         return responseBuilder.build();
     }

@@ -1,4 +1,4 @@
-<div id="game_end_layout">
+<div id="game_layout">
     <h3>
         {{#gameWon}}
             Game Won :)
