@@ -33,6 +33,14 @@ public class GameHistory implements Serializable {
         }
         return null;
     }
+
+    public void deleteHistory(String playerName){
+        for(PlayerHistory pH: gameHistory){
+            if(playerName.equals(pH.playerName))
+                gameHistory.remove(pH);
+        }
+    }
+
     public List<PlayerHistory> getAllPlayHistory(){
         return gameHistory;
     }
