@@ -6,14 +6,13 @@ const TEMPLATES_URI = "dist/mustache/";
 const COOKIE_NAME = "logged_in";
 
 $(document).ready(function() {
-    console.log(getCookie(COOKIE_NAME));
     if(getCookie(COOKIE_NAME) == null)
         loadPage("login.mst", "#main", false);
     else
         loadPage("master.mst", "#main", false);
 
 
-    $(document).on("click", "#nav-main ul a", function(event) {
+    $(document).on("click", "#nav-main a, #game_end_layout button", function(event) {
         event.preventDefault();
 
         $(this).addClass("active").parent().siblings().children().removeClass("active");
@@ -30,15 +29,17 @@ $(document).ready(function() {
                 loadPage("rules.mst", "#content", false);
                 break;
             case "link-admin":
-                console.log("Admin");
+                loadPage("admin.mst", "#content", false);
                 break;
             case "link-logo":
-                console.log("Logo");
+                loadPage("start.mst", "#content", false);
                 break;
             case "link-logout":
                 loadPage("login.mst", "#main", true, AUTH_RESOURCE_URI+"/logout/"+getCookie(COOKIE_NAME)[0], "POST");
-                //setCookie(COOKIE_NAME, "", -1);
+                setCookie(COOKIE_NAME, "", -1);
                 break;
+            case "link-play":
+                loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
             default:
                 console.log("Andre")
         }
@@ -76,8 +77,14 @@ function loadPage(template, view, withRest, uri, type) {
     if(withRest) {
         rest(RESOURCES_URI+uri, type).done(function (data) {
             $alert.attr("hidden");
-            json = JSON.parse(data);
+
+            try {
+                json = JSON.parse(data);
+            } catch (e) {
+                json = data;
+            }
             console.log(json);
+
             if(json.loggedIn) {
                 setCookie(COOKIE_NAME, json.playerId+"+"+json.admin, 7);
             }
@@ -94,8 +101,12 @@ function loadPage(template, view, withRest, uri, type) {
         });
     } else {
         var cookieObj = getCookie(COOKIE_NAME);
-        if(cookieObj != null)
-            render(template, view, { playerId: cookieObj[0], admin: cookieObj[1] });
+        if(cookieObj != null){
+            var admin = (cookieObj[1] === "true");
+            render(template, view, { playerId: cookieObj[0], admin: admin });}
+        else {
+            render(template, view);
+        }
     }
 
 }
@@ -137,37 +148,3 @@ function getCookie(cname) {
     }
     return null;
 }
-
-/*
-$(document).on("submit", "#guess_letter_form", function(event) {
-        event.preventDefault();
-        var formData = $(this).serializeArray();
-
-        rest(RESOURCE_URI+"word/guess", "POST", formData[0].value).done(function (data) {
-            $("#word").text(data);
-        }).fail(function(data) {
-            console.log("ERROR in guess letter form")
-        });
-
-        // reset form
-        $(this)[0].reset();
-    });
-
-function loadMaster() {
-    render("master.mst", "#main", { name: "Jeppe", role: "Admin" });
-    rest(RESOURCE_URI+"word/visible", "GET").done(function(data) {
-        render("game.mst", "#content", { word: data });
-    });
-}
-
-function gamePage() {
-    rest(RESOURCE_URI+"word/visible", "GET").done(function (data) {
-        $.get(TEMPLATES_URI+"game.mst", function(template) {
-            var rendered = Mustache.render(template, {word: data});
-            $("#main").html(rendered);
-        }).fail(function(data) {
-
-        });
-    });
-}
-*/

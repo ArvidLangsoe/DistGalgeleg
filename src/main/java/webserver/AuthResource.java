@@ -26,7 +26,7 @@ public class AuthResource {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            responseBuilder = Response.status(200).entity("{ \"loggedIn\": \""+loggedIn+"\", \"playerId\": \""+playerId+"\", \"admin\": \""+admin+"\" }");
+            responseBuilder = Response.status(200).entity("{ \"loggedIn\": "+loggedIn+", \"playerId\": \""+playerId+"\", \"admin\": "+admin+" }");
             try {
                 AppConfig.controller.newGame(playerId);
             } catch (Exception e) {
@@ -39,22 +39,36 @@ public class AuthResource {
     }
 
     @GET
-    @Path("/admin/{id}")
+    @Path("/login/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response isAdmin(@PathParam("id") String playerId) {
-        return null;
+        Response.ResponseBuilder responseBuilder;
+        try {
+            boolean loggedIn = AppConfig.security.isLoggedIn(playerId);
+            if (loggedIn)
+                responseBuilder = Response.status(200).entity(playerId + " is logged in.");
+            else
+                responseBuilder = Response.status(200).entity(playerId + " is not logged in.");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            responseBuilder = Response.status(404).entity("");
+        }
+
+        return responseBuilder.build();
     }
 
     @POST
     @Path("/logout/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response logout(@PathParam("id") String playerId) {
-        Response.ResponseBuilder responseBuilder = null;
+        Response.ResponseBuilder responseBuilder;
         try {
             AppConfig.security.logout(playerId);
+            responseBuilder = Response.status(200).entity("Successfully logged out");
         } catch (RemoteException e) {
             e.printStackTrace();
+            responseBuilder = Response.status(404).entity("Error");
         }
         return responseBuilder.build();
     }
-
 }

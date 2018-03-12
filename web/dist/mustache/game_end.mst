@@ -1,4 +1,4 @@
-<div id="game_layout">
+<div id="game_end_layout">
     <h3>
         {{#gameWon}}
             Game Won :)
@@ -16,4 +16,5 @@
         {{/usedLetters}}
     </p>
     <img src="dist/img/forkert{{numWrongLetters}}.png">
+    <button type="button" class="btn btn-dark" id="link-play">Spil igen</button>
 </div>
