@@ -3,12 +3,14 @@ package gameserver.server;
 import gameserver.transport.PlayerHistory;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class GameHistory implements Serializable {
 
-    private List<PlayerHistory> gameHistory = new ArrayList<PlayerHistory>();
+    private List<PlayerHistory> gameHistory = new CopyOnWriteArrayList<PlayerHistory>();
 
     public void addGame(String playerName,boolean gameWon){
         PlayerHistory pHis=null;
@@ -39,6 +41,12 @@ public class GameHistory implements Serializable {
             if(playerName.equals(pH.playerName))
                 gameHistory.remove(pH);
         }
+
+        for(PlayerHistory pH: gameHistory){
+            if(playerName.equals(pH.playerName))
+                System.out.println(pH.playerName+" was not deleted.");
+        }
+
     }
 
     public List<PlayerHistory> getAllPlayHistory(){

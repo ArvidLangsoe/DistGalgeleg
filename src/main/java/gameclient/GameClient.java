@@ -16,6 +16,7 @@ public class GameClient {
         Service service = Service.create(url, qname);
         IGalgeController gc = service.getPort(IGalgeController.class);
 
+
         GameController game = new GameController(gc);
 
         game.runGame();
