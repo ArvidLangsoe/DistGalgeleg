@@ -1,0 +1,7 @@
+<div id="admin_layout">
+    <h1>Admin panel</h1>
+    <h2>Spil historik</h2>
+    <div id="admin_history_layout"></div>
+    <h2>Aktive spil:</h2>
+    <div id="admin_games_layout"></div>
+</div>

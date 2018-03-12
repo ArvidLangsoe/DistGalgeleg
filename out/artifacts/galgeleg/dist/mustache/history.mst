@@ -1,0 +1,29 @@
+<div id="history_layout">
+    <h1>Historik</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Spiller</th>
+            <th>Spil spillet</th>
+            <th>Spil vundet</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{^.}}
+        <tr>
+            <td>Ingen historik tilgængelig</td>
+            <td></td>
+            <td></td>
+        </tr>
+        {{/.}}
+        {{#.}}
+        <tr>
+            <td>{{playerName}}</td>
+            <td>{{gamesPlayed}}</td>
+            <td>{{gamesWon}}</td>
+        </tr>
+        {{/.}}
+
+        </tbody>
+    </table>
+</div>

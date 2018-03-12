@@ -1,0 +1,43 @@
+<div id="master_layout">
+    <header id="top">
+        <nav id="nav-main" class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand mb-0 mr-5 h1" id="link-logo" href="#">GALGELEG</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" id="link-game" href="#">Spil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="link-history" href="#">Historik</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="link-rules" href="#">Regler</a>
+                    </li>
+
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="dropdown my-2 my-lg-0">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{playerId}}
+                            {{#admin}}
+                            <span class="badge badge-primary">Admin</span>
+                            {{/admin}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {{#admin}}
+                            <a class="dropdown-item" id="link-admin" href="#">Admin Panel</a>
+                            {{/admin}}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" id="link-logout" href="#">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>
+<div id="content"></div>

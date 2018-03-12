@@ -1,0 +1,20 @@
+<div id="game_layout">
+    <h3>
+        {{#gameWon}}
+            Game Won :)
+        {{/gameWon}}
+        {{^gameWon}}
+            Game Lost :(
+        {{/gameWon}}
+    </h3>
+    <h4>Ordet var:</h4>
+    <h2>{{word}}</h2>
+    <h3>Antal forkerte bogstaver: {{numWrongLetters}}</h3>
+    <p>Brugte bogstaver:
+        {{#usedLetters}}
+        <span class="badge badge-light text-uppercase">{{.}}</span>
+        {{/usedLetters}}
+    </p>
+    <img src="dist/img/forkert{{numWrongLetters}}.png">
+    <button type="button" class="btn btn-dark" id="link-play">Spil igen</button>
+</div>

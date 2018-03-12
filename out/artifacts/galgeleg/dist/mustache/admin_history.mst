@@ -1,0 +1,29 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Spiller</th>
+        <th>Spil spillet</th>
+        <th>Spil vundet</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{^.}}
+    <tr>
+        <td>Ingen historik tilgængelig</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {{/.}}
+    {{#.}}
+    <tr>
+        <td>{{playerName}}</td>
+        <td>{{gamesPlayed}}</td>
+        <td>{{gamesWon}}</td>
+        <td><a href="#" id="link-delhist">Slet historik</a></td>
+    </tr>
+    {{/.}}
+
+    </tbody>
+</table>
