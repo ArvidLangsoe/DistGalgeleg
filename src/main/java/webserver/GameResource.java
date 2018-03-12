@@ -11,8 +11,8 @@ public class GameResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public HangmanData getWordTest() {
-        return AppConfig.controller.getGameData("testuser");
+    public String getWordTest() {
+        return "";
     }
 
     /*
@@ -44,6 +44,7 @@ public class GameResource {
     public Response postGame(@PathParam("id") String playerId, @QueryParam("letter") String letter, @QueryParam("new") boolean newGame) {
         HangmanData data;
         Response.ResponseBuilder responseBuilder;
+
         try {
             if(newGame) {
                 data = AppConfig.controller.newGame(playerId);
@@ -56,7 +57,7 @@ public class GameResource {
 
         } catch(Exception e) {
             e.printStackTrace();
-            responseBuilder = Response.status(404).entity("User not found");
+            responseBuilder = Response.status(401);
         }
         return responseBuilder.build();
     }

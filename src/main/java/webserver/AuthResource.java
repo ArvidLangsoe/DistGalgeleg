@@ -36,7 +36,7 @@ public class AuthResource {
 
     @GET
     @Path("/login/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isAdmin(@PathParam("id") String playerId) {
         Response.ResponseBuilder responseBuilder;
         try {
@@ -55,7 +55,7 @@ public class AuthResource {
 
     @POST
     @Path("/logout/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response logout(@PathParam("id") String playerId) {
         Response.ResponseBuilder responseBuilder;
         try {

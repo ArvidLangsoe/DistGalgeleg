@@ -59,6 +59,4 @@ public interface IGalgeController {
     @WebMethod
     public void deleteGameData(String adminName, String playerName)throws Exception;
 
-
-
 }

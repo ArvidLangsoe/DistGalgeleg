@@ -1,0 +1,24 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Spiller</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{^.}}
+    <tr>
+        <td>Ingen historik tilgængelig</td>
+    </tr>
+    {{/.}}
+    {{#.}}
+    <tr>
+        <td>{{.}}</td>
+        <td>
+            <a href="#" id="link-endgame">Afslut spil</a>
+        </td>
+    </tr>
+    {{/.}}
+
+    </tbody>
+</table>

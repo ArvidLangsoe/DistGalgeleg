@@ -12,7 +12,7 @@ $(document).ready(function() {
         loadPage("master.mst", "#main", false);
 
 
-    $(document).on("click", "#nav-main a, #game_layout button[type=\"button\"]", function(event) {
+    $(document).on("click", "#nav-main a, #game_layout button[type=\"button\"], #admin_layout a", function(event) {
         event.preventDefault();
 
         $(this).addClass("active").parent().siblings().children().removeClass("active");
@@ -30,6 +30,8 @@ $(document).ready(function() {
                 break;
             case "link-admin":
                 loadPage("admin.mst", "#content", false);
+                loadPage("admin_games.mst", "#admin_games_layout", true, GAME_RESOURCE_URI+"/history?admin="+getCookie(COOKIE_NAME)[0], "GET");
+                loadPage("admin_history.mst", "#admin_history_layout", true, HISTORY_RESOURCE_URI, "GET");
                 break;
             case "link-logo":
                 loadPage("start.mst", "#content", false);
@@ -41,6 +43,14 @@ $(document).ready(function() {
             case "link-play":
                 console.log("Play again");
                 loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
+                break;
+            case "link-endgame":
+                var user = $(this).parent().parent().children().first().text();
+                loadPage("admin_games.mst", "#admin_games_layout", true, GAME_RESOURCE_URI+"/"+user+"?game=true&admin="+getCookie(COOKIE_NAME)[0], "DELETE");
+                break;
+            case "link-delhist":
+                var user = $(this).parent().parent().children().first().text();
+                loadPage("admin_history.mst", "#admin_history_layout", true, GAME_RESOURCE_URI+"/"+user+"?history=true&admin="+getCookie(COOKIE_NAME)[0], "DELETE");
                 break;
             default:
                 console.log("Andre")
@@ -79,15 +89,17 @@ function loadPage(template, view, withRest, uri, type) {
     if(withRest) {
         rest(RESOURCES_URI+uri, type).done(function (data, textStatus, jqXHR) {
             $alert.attr("hidden");
-            if(jqXHR.status == 204) {
-                loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
+            switch(jqXHR.status) {
+                case 204:
+                    loadPage("game.mst", "#content", true, GAME_RESOURCE_URI+"/"+getCookie(COOKIE_NAME)[0]+"?new=true", "POST");
+                    break;
             }
+
             try {
                 json = JSON.parse(data);
             } catch (e) {
                 json = data;
             }
-            console.log(json);
             if(json != null) {
                 if(json.loggedIn) {
                     setCookie(COOKIE_NAME, json.playerId+"+"+json.admin, 7);
@@ -99,9 +111,17 @@ function loadPage(template, view, withRest, uri, type) {
                     render(template, view, json);
                 }
             }
-        }).fail(function (data) {
-            //json = JSON.stringify(data);
-            $alert.removeAttr("hidden").html(data.responseText);
+
+            if(type === "DELETE") {
+                render(template, view);
+            }
+        }).fail(function (jqXHR) {
+            $alert.removeAttr("hidden").html(jqXHR.responseText);
+            switch(jqXHR.status) {
+                case 401:
+                    loadPage("login.mst", "#main", false);
+                    break;
+            }
             //console.log("ERROR REST:\n"+ json);
         });
     } else {
