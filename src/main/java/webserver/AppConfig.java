@@ -27,7 +27,7 @@ public class AppConfig extends Application {
         QName qname = new QName("http://server.gameserver/", "GalgeControllerService");
         Service service = Service.create(url, qname);
         controller = service.getPort(IGalgeController.class);
-        controller.newGame("x");
+        //controller.newGame("x");
     }
 
 }

@@ -153,7 +153,6 @@ public class GalgeController implements IGalgeController {
         if(!security.isLoggedInAdmin(adminName)){
             throw new Exception("You dont have permission");
         }
-
-        gameMap.remove(playerName);
+       history.deleteHistory(playerName);
     }
 }
